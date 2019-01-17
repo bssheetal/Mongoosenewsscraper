@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 //app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost/newscraper", { useNewUrlParser: true });
+mongoose.connect("mongodb://localhost/nytimesscraper", { useNewUrlParser: true });
 
 app.get("/scrape", function (req, res) {
     axios.get("https://www.nytimes.com/").then(function (response) {
@@ -28,17 +28,17 @@ app.get("/scrape", function (req, res) {
             console.log(result);
 
 
-        })
-
         db.Article.create(result).then(function (dbArticle) {
             console.log(dbArticle);
         }).catch(function (err) {
             console.log(err);
         });
     });
+    
 
     res.send("scrape complete");
-})
+});
+});
 
 app.listen(PORT, function () {
     console.log("App running on port " + PORT + "!");
