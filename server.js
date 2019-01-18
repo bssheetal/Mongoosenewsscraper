@@ -62,6 +62,11 @@ app.get("/articles",function(req,res)
     });
 });
 
+app.get("api/clear",function(req,res)
+{
+    db.Article.remove();
+});
+
 app.listen(PORT, function () {
     console.log("App running on port " + PORT + "!");
 });
