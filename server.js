@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost/nytimesscraper", { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URI||"mongodb://localhost/nytimesscraper", { useNewUrlParser: true });
 
 app.get("/scrape", function (req, res) {
     res.send("scrape complete");
