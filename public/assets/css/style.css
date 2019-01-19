@@ -49,3 +49,8 @@ body
     font-weight: 800;
     color: white;
 }
+
+.card .card-header .delete{
+    
+    right:180px;
+}

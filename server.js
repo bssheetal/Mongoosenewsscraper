@@ -32,7 +32,7 @@ app.get("/articles", function (req, res) {
         });
 });
 
-app.get("/articles/savedarticle",function(req,res)
+app.get("/saved",function(req,res)
 {
     var query={'savearticle':true}
     db.Article.find(query).then(function(dbArticle)
