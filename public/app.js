@@ -45,6 +45,20 @@ $("#saved").on("click", function (req, res) {
 
 })
 
+$(document).on("click",".save", function () {
+    console.log("save button clicked");
+    let id=$(this).attr("data-id");
+    console.log(id);
+    
+    $.post(`/articles/${id}`,{savearticle:true},function(data)
+    {
+
+    }).then(function(data)
+    {
+        console.log(data);
+        window.location = "/saved.html"
+    })
+})
 
 function loadarticles() {
     $.get("/articles", function (data) {
@@ -55,7 +69,7 @@ function loadarticles() {
             var cardbody = $("<div>").addClass("card-body");
             var headline = $(`<h3> ${data[i].headline}</h3>`);
             var linktag = $(`<a href="https://www.nytimes.com/${data[i].link}"> </a>`);
-            var btnatag = $(`<a class="btn btn-success save">Save Article</a>`);
+            var btnatag = $(`<a class="btn btn-success save" data-id=${data[i]._id}>Save Article</a>`);
             var cardbodyp = $(`<p>${data[i].summary}</p>`)
             headline.append(linktag);
             headline.append(btnatag);
