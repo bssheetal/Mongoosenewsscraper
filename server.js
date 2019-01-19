@@ -24,7 +24,8 @@ app.get("/scrape", function (req, res) {
 
 
 app.get("/articles", function (req, res) {
-    db.Article.find({}).then(function (dbArticle) {
+    var query={'savearticle':false}
+    db.Article.find(query).then(function (dbArticle) {
         res.json(dbArticle);
     })
         .catch(function (err) {
@@ -32,32 +33,33 @@ app.get("/articles", function (req, res) {
         });
 });
 
-app.get("/saved",function(req,res)
-{
-    var query={'savearticle':true}
-    db.Article.find(query).then(function(dbArticle)
-    {
+app.get("/saved", function (req, res) {
+    var query = { 'savearticle': true }
+    db.Article.find(query).then(function (dbArticle) {
         res.json(dbArticle);
     })
-    .catch(function(err)
-    {
+        .catch(function (err) {
+            res.json(err);
+        })
+});
+
+app.post("/articles/:id", function (req, res) {
+    db.Article.findOneAndUpdate({ _id: req.params.id }, { savearticle: true }).then(function (dbArticle) {
+        res.json(dbArticle);
+    }).catch(function (err) {
         res.json(err);
+    });
+});
+
+app.get('/clear', (req, res) => {
+    db.Article.deleteMany({}, function(err, data) {
+        if (err) {
+            console.log(err)
+        }
+        res.json(data)
     })
-});
-
-app.post("/articles/:id",function(req,res)
-{
-   db.Article.findOneAndUpdate({_id:req.params.id},{savearticle:true}).then(function(dbArticle)
-   {
-       res.json(dbArticle);
-   }).catch(function(err)
-   {
-       res.json(err);
-   });
-});
-
-function scrape()
-{
+})
+function scrape() {
     axios.get("https://www.nytimes.com/").then(function (response) {
         var $ = cheerio.load(response.data);
 

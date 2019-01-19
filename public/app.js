@@ -1,60 +1,45 @@
 
 
 $(document).ready(function () {
-
-    loadarticles();
-
+        loadarticles();
+    
 })
 
 
 
 $(".clear").on("click", function () {
 
-    $(".container-fluid").empty();
-    var div = $("<div>").addClass("alert alert-warning text-center");
-    var headline = $("<h4>Uh Oh. Looks like we don't have any new articles.</h4>");
-    div.append(headline);
-    var carddiv = $("<div>").addClass("card");
-    var cardheaderdiv = $("<div>").addClass("card-header text-center");
-    var cardbody = $("<div>").addClass("card-body text-center");
-    var cardheadline = $(`<h3> What would you like to do?</h3>`);
-    var cardbodyheadline = $(`<h4><a class="scrape-new">Try Scraping new articles</a></h4>`);
-    cardheaderdiv.append(cardheadline);
-    carddiv.append(cardheaderdiv);
-    cardbody.append(cardbodyheadline);
-    $(".container-fluid").append(div);
-    $(".container-fluid").append(carddiv);
-    $(".container-fluid").append(cardbody);
+    $.get("/clear", function (data) {
+        if (data) {
+            emptytemplate();
 
+        }
+
+    })
 
 })
 
 
 $(".scrape-new").on("click", function () {
-    $.get("/scrape", function (data) {
-        $(".container-fluid").empty();
-        loadarticles();
-    });
-
+    scrape();
+    window.location.reload();
 });
 
 $("#saved").on("click", function (req, res) {
     console.log("saved article clicked");
     $(this).addClass("active");
-    
+
 
 })
 
-$(document).on("click",".save", function () {
+$(document).on("click", ".save", function () {
     console.log("save button clicked");
-    let id=$(this).attr("data-id");
+    let id = $(this).attr("data-id");
     console.log(id);
-    
-    $.post(`/articles/${id}`,{savearticle:true},function(data)
-    {
 
-    }).then(function(data)
-    {
+    $.post(`/articles/${id}`, { savearticle: true }, function (data) {
+
+    }).then(function (data) {
         console.log(data);
         window.location = "/saved.html"
     })
@@ -81,4 +66,28 @@ function loadarticles() {
         }
 
     });
+}
+function scrape() {
+    $.get("/scrape", function (data) {
+        $(".container-fluid").empty();
+        loadarticles();
+    });
+}
+
+function emptytemplate() {
+    $(".container-fluid").empty();
+    var div = $("<div>").addClass("alert alert-warning text-center");
+    var headline = $("<h4>Uh Oh. Looks like we don't have any new articles.</h4>");
+    div.append(headline);
+    var carddiv = $("<div>").addClass("card");
+    var cardheaderdiv = $("<div>").addClass("card-header text-center");
+    var cardbody = $("<div>").addClass("card-body text-center");
+    var cardheadline = $(`<h3> What would you like to do?</h3>`);
+    var cardbodyheadline = $(`<h4><a class="scrape-new">Try Scraping new articles</a></h4>`);
+    cardheaderdiv.append(cardheadline);
+    carddiv.append(cardheaderdiv);
+    cardbody.append(cardbodyheadline);
+    $(".container-fluid").append(div);
+    $(".container-fluid").append(carddiv);
+    $(".container-fluid").append(cardbody);
 }
