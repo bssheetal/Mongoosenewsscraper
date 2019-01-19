@@ -35,11 +35,11 @@ $(document).ready(function () {
 //     })
 // })
 
-$("document").on("click",".clear", function () {
-
+$(".clear").on("click", function () {
+    console.log("clear btn clicked");
     $.get("api/clear",function(data)
     {
-        console.log("clear btn clicked");
+       
         $(".container-fluid").empty();
         var div = $("<div>").addClass("alert alert-warning");
         var headline = $("<h4>Uh Oh. Looks like we don't have any new articles.</h4>");

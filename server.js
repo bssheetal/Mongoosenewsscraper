@@ -20,27 +20,35 @@ mongoose.connect("mongodb://localhost/nytimesscraper", { useNewUrlParser: true }
 app.get("/scrape", function (req, res) {
     axios.get("https://www.nytimes.com/").then(function (response) {
         var $ = cheerio.load(response.data);
-        
 
+        var result = {};
         $("article div").each(function (i, element) {
-            var result = {};
+
             result.link = $(this).
                 children("a")
                 .attr("href");
-            // result.headline = $(element)
-            //     .children("h2").index(1)
-            //     .text();
-            //result.summary=$(this).children("ul li").text();
+            result.headline = $(this)
+                .find("span")
+                .text();
+                // console.log($(this).children("ul").find("li").text());
+            result.summary=$(this).children("a").find("ul").find("li").text();
+            db.Article.create(result).then(function (dbArticle) {
+                console.log(dbArticle);
+            })
+                .catch(function (err) {
+                    console.log(err);
+                });
         
+        });
 
-        db.Article.create(result).then(function (dbArticle) {
-            console.log(dbArticle);
-        })
-            .catch(function (err) {
-                console.log(err);
-            });
+        // $("article h2").each(function (i, element) {
+        //     result.headline = $(this).closest("span")
+        //         .text();
+        // });
+
+        
     });
-   
+
     // $("article ul").each(function(i,element)
     // {
     //     summary=$(this).children("li").text();
@@ -48,22 +56,18 @@ app.get("/scrape", function (req, res) {
 
     res.send("scrape complete");
 });
-});
 
-app.get("/articles",function(req,res)
-{
-    db.Article.find({}).then(function(dbArticle)
-    {
+
+app.get("/articles", function (req, res) {
+    db.Article.find({}).then(function (dbArticle) {
         res.json(dbArticle);
     })
-    .catch(function(err)
-    {
-        res.json(err);
-    });
+        .catch(function (err) {
+            res.json(err);
+        });
 });
 
-app.get("api/clear",function(req,res)
-{
+app.get("api/clear", function (req, res) {
     db.Article.remove();
 });
 
