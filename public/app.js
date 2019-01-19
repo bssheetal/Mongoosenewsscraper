@@ -7,39 +7,29 @@ $(document).ready(function () {
             div.attr("data-id", data[i]._id);
             var cardheaderdiv = $("<div>").addClass("card-header");
             var cardbody = $("<div>").addClass("card-body");
-            var headline = $("<h3>");
+            var headline = $(`<h3> ${data[i].headline}</h3>`);
             var linktag = $(`<a href="https://www.nytimes.com/${data[i].link}"> </a>`);
             var btnatag = $(`<a class="btn btn-success save">Save Article</a>`);
-            // var btnsavearticle=$("<button>");
-            // btnsavearticle.addText("Save Article");        
+            var cardbodyp=$(`<p>${data[i].summary}</p>`)       
             headline.append(linktag);
             headline.append(btnatag);
             cardheaderdiv.append(headline);
             div.append(cardheaderdiv);
+            cardbody.append(cardbodyp);
             div.append(cardbody);
             $(".container-fluid").append(div);
         }
 
     })
 
-   
-
 })
 
 
-// $(document).on("click",".scrape-new",function()
-// {
-//     $.ajax({
-//         method:"GET",
-//         url:"/articles"
-//     })
-// })
 
 $(".clear").on("click", function () {
     console.log("clear btn clicked");
     $.get("api/clear",function(data)
-    {
-       
+    {       
         $(".container-fluid").empty();
         var div = $("<div>").addClass("alert alert-warning");
         var headline = $("<h4>Uh Oh. Looks like we don't have any new articles.</h4>");

@@ -30,29 +30,18 @@ app.get("/scrape", function (req, res) {
             result.headline = $(this)
                 .find("span")
                 .text();
-                // console.log($(this).children("ul").find("li").text());
-            result.summary=$(this).children("a").find("ul").find("li").text();
+
+            result.summary = $(this).children("a").find("ul").find("li").text();
             db.Article.create(result).then(function (dbArticle) {
                 console.log(dbArticle);
             })
                 .catch(function (err) {
                     console.log(err);
                 });
-        
+
         });
 
-        // $("article h2").each(function (i, element) {
-        //     result.headline = $(this).closest("span")
-        //         .text();
-        // });
-
-        
     });
-
-    // $("article ul").each(function(i,element)
-    // {
-    //     summary=$(this).children("li").text();
-    // });
 
     res.send("scrape complete");
 });
