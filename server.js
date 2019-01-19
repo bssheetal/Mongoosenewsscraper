@@ -32,8 +32,28 @@ app.get("/articles", function (req, res) {
         });
 });
 
-app.get("api/clear", function (req, res) {
-    db.Article.remove();
+app.get("/articles/savedarticle",function(req,res)
+{
+    var query={'savearticle':true}
+    db.Article.find(query).then(function(dbArticle)
+    {
+        res.json(dbArticle);
+    })
+    .catch(function(err)
+    {
+        res.json(err);
+    })
+});
+
+app.post("/articles/:id",function(req,res)
+{
+   db.Article.findOneAndUpdate({_id:req.params.id},{savearticle:true}).then(function(dbArticle)
+   {
+       res.json(dbArticle);
+   }).catch(function(err)
+   {
+       res.json(err);
+   });
 });
 
 function scrape()
