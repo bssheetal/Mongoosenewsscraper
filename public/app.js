@@ -1,6 +1,47 @@
 
 
 $(document).ready(function () {
+   
+    loadarticles();
+
+})
+
+
+
+$(".clear").on("click", function () {
+    
+        $(".container-fluid").empty();
+        var div = $("<div>").addClass("alert alert-warning text-center");
+        var headline = $("<h4>Uh Oh. Looks like we don't have any new articles.</h4>");
+        div.append(headline);
+        var carddiv = $("<div>").addClass("card");
+        var cardheaderdiv = $("<div>").addClass("card-header text-center");
+        var cardbody = $("<div>").addClass("card-body text-center");
+        var cardheadline = $(`<h3> What would you like to do?</h3>`);
+        var cardbodyheadline=$(`<h4><a class="scrape-new">Try Scraping new articles</a></h4>`);
+        cardheaderdiv.append(cardheadline);
+        carddiv.append(cardheaderdiv);
+        cardbody.append(cardbodyheadline);
+        $(".container-fluid").append(div);
+        $(".container-fluid").append(carddiv);
+        $(".container-fluid").append(cardbody);
+  
+   
+})
+
+
+$(".scrape-new").on("click",function()
+{
+    $.get("/scrape",function(data)
+    {
+        $(".container-fluid").empty();
+        loadarticles();
+    });
+
+});
+
+function loadarticles()
+{
     $.get("/articles", function (data) {
         for (var i = 0; i < 3; i++) {
             var div = $("<div>").addClass("card");
@@ -20,21 +61,5 @@ $(document).ready(function () {
             $(".container-fluid").append(div);
         }
 
-    })
-
-})
-
-
-
-$(".clear").on("click", function () {
-    console.log("clear btn clicked");
-    $.get("api/clear",function(data)
-    {       
-        $(".container-fluid").empty();
-        var div = $("<div>").addClass("alert alert-warning");
-        var headline = $("<h4>Uh Oh. Looks like we don't have any new articles.</h4>");
-        div.append(headline);
-        $(".container-fluid").append(div);
-    })
-   
-})
+    });
+}

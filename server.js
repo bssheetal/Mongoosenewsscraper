@@ -18,6 +18,26 @@ app.use(express.static("public"));
 mongoose.connect("mongodb://localhost/nytimesscraper", { useNewUrlParser: true });
 
 app.get("/scrape", function (req, res) {
+    res.send("scrape complete");
+    scrape();
+});
+
+
+app.get("/articles", function (req, res) {
+    db.Article.find({}).then(function (dbArticle) {
+        res.json(dbArticle);
+    })
+        .catch(function (err) {
+            res.json(err);
+        });
+});
+
+app.get("api/clear", function (req, res) {
+    db.Article.remove();
+});
+
+function scrape()
+{
     axios.get("https://www.nytimes.com/").then(function (response) {
         var $ = cheerio.load(response.data);
 
@@ -42,23 +62,7 @@ app.get("/scrape", function (req, res) {
         });
 
     });
-
-    res.send("scrape complete");
-});
-
-
-app.get("/articles", function (req, res) {
-    db.Article.find({}).then(function (dbArticle) {
-        res.json(dbArticle);
-    })
-        .catch(function (err) {
-            res.json(err);
-        });
-});
-
-app.get("api/clear", function (req, res) {
-    db.Article.remove();
-});
+}
 
 app.listen(PORT, function () {
     console.log("App running on port " + PORT + "!");
