@@ -1,8 +1,8 @@
 
 
 $(document).ready(function () {
-        loadarticles();
-    
+    loadarticles();
+
 })
 
 
